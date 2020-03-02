@@ -1,0 +1,30 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*'
+
+Layout/LineLength:
+  IgnoredPatterns: ['\A\W*(x?it|describe|context)[\s\(].*\z']
+  Max: 100
+  Details: >-
+    Lines are normally set to a max of 100 characters, but this restriction is removed for lines
+    that start with RSpec keywords like `it`, `xit`, `describe`, and `context`.
+
+Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context']
+  Details: >-
+    Number of lines in a block is restricted except for `describe` and `context` blocks in RSpec.
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
