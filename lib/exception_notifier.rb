@@ -1,7 +1,7 @@
 class ExceptionNotifier
   def self.call(*args)
-    if args.first.is_a?(Exception)
-      capture_exception(args)
+    if exceptionable?(args.first)
+      capture_exception(args.first)
     else
       capture_message(args)
     end
@@ -21,5 +21,10 @@ class ExceptionNotifier
     end
 
     Raven.capture_message(message, extra: extra)
+  end
+
+  def self.exceptionable?(obj)
+    obj.is_a?(Exception) ||
+      (obj.respond_to?(:ancestors) && obj.ancestors.include?(Exception))
   end
 end
