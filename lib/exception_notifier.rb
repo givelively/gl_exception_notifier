@@ -1,7 +1,7 @@
 class ExceptionNotifier
   def self.call(*args)
     if exceptionable?(args.first)
-      capture_exception(args)
+      capture_exception(args.first)
     else
       capture_message(args)
     end
