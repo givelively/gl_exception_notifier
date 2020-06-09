@@ -1,14 +1,14 @@
 class ExceptionNotifier
   def self.call(*args)
     if exceptionable?(args.first)
-      capture_exception(args.first)
+      capture_exception(args)
     else
       capture_message(args)
     end
   end
 
   def self.capture_exception(args)
-    Raven.capture_exception(args)
+    Raven.capture_exception(*args)
   end
 
   def self.capture_message(*args)
