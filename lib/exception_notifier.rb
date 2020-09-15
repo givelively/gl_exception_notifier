@@ -14,7 +14,7 @@ class ExceptionNotifier
   def self.capture_message(args)
     if args.first.is_a?(String)
       message = args.first
-      extra = args.drop(1)
+      extra = args.length == 2 && args.last.is_a?(Hash) ? args.last : { parameters: args.drop(1) }
     else
       message = 'Unknown parameter set.'
       extra = { parameters: args }
