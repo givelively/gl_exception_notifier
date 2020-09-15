@@ -11,7 +11,7 @@ class ExceptionNotifier
     Raven.capture_exception(*args)
   end
 
-  def self.capture_message(*args)
+  def self.capture_message(args)
     if args.first.is_a?(String)
       message = args.first
       extra = args.drop(1)

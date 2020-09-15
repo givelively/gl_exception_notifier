@@ -32,5 +32,14 @@ describe ExceptionNotifier do
       described_class.should_receive(:capture_message)
       described_class.call('message', details: 'we are in trouble')
     end
+
+    it 'correctly reports mixed parameters to Sentry' do
+      allow(Raven).to receive(:capture_message)
+
+      Raven.should_receive(:capture_message).with(
+        'message', extra: [{ details: 'we are in trouble' }]
+      )
+      described_class.call('message', details: 'we are in trouble')
+    end
   end
 end
