@@ -53,6 +53,10 @@ class ExceptionNotifier
       end
     end
 
+    def last_breadcrumb
+      error_client.breadcrumbs.buffer.last
+    end
+
     private
 
     def error_client

@@ -129,4 +129,18 @@ describe ExceptionNotifier do
       end
     end
   end
+
+  describe '.last_breadcrumb' do
+    let(:breadcrumbs) { instance_double('breadcrumb') }
+    let(:buffer) { ['first', 'last'] }
+
+    before do
+      allow(Raven).to receive(:breadcrumbs).and_return(breadcrumbs)
+      allow(breadcrumbs).to receive(:buffer).and_return(buffer)
+    end
+
+    it 'returns the last crumb from the buffer' do
+      expect(described_class.last_breadcrumb).to eq 'last'
+    end
+  end
 end
