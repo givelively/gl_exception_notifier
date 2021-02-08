@@ -2,11 +2,11 @@
 
 This is GiveLively's exception notification wrapper. The goal of this gem is to provide the charity api with a clean set of exception and logging apis regardless of what exception client is used under the hood. 
 
-Currently we use [sentry-raven](https://www.rubydoc.info/gems/sentry-raven/2.7.3), which is now in maintenance mode. it is recommended by Entry that we migrate from this deprecated sdk to the newer [sentry-ruby](https://docs.sentry.io/platforms/ruby/). `ExceptionNotifier` will isolate the main charity api app from this change.
+Currently we use [sentry-raven](https://www.rubydoc.info/gems/sentry-raven/2.7.3), which is now in maintenance mode. it is recommended by Sentry that we migrate from this deprecated sdk to the newer [sentry-ruby](https://docs.sentry.io/platforms/ruby/). `ExceptionNotifier` will isolate the main charity api app from this change.
 
 ## Usage
 
-Exception notifier supports the following method calls:
+`ExceptionNotifier` supports the following:
 
 **Record an Exception**
 
@@ -42,7 +42,7 @@ ExceptionNotifier.breadcrumbs(message: 'foo', data: { bar: 'baz' })
 
 **Breadcrumb Inspection**
 
-For testing purposes, we may wish to inspect the last  `breadcrumb`.
+For testing purposes, we may wish to inspect the last  `breadcrumb`. To do so, we provide a `last_breadcrumb` method.
 
 ```ruby
 # spec/...
