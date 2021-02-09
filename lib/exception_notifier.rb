@@ -43,12 +43,12 @@ class ExceptionNotifier
 
     # @params data [Hash] the key values to add to the breadcrumb
     # @params message [String] the message string to add to the breadcrumb
-    def breadcrumbs(data:, message:)
+    def breadcrumbs(data:, message: nil)
       raise ArgumentError.new('data must be a hash') unless data.is_a?(Hash)
-      raise ArgumentError.new('message must be a string') unless message.is_a?(String)
+      raise ArgumentError.new('when providing a message, it must be a string') if !message.nil? && !message.is_a?(String)
 
       error_client.breadcrumbs.record do |crumb|
-        crumb.message = message
+        crumb.message = message if message
         crumb.data = data
       end
     end

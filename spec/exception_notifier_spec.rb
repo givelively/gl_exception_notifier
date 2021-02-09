@@ -128,6 +128,15 @@ describe ExceptionNotifier do
         expect { described_class.breadcrumbs(data: data, message: data) }.to raise_error ArgumentError
       end
     end
+
+    context 'when message is not provided' do
+      it 'sets data cumbs' do
+        crumb.should_receive(:message=).never
+        crumb.should_receive(:data=).with(data)
+
+        described_class.breadcrumbs(data: data)
+      end
+    end
   end
 
   describe '.last_breadcrumb' do
