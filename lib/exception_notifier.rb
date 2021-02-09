@@ -48,7 +48,7 @@ class ExceptionNotifier
       raise ArgumentError.new('when providing a message, it must be a string') if message.present? && !message.is_a?(String)
 
       error_client.breadcrumbs.record do |crumb|
-        crumb.message = message if message
+        crumb.message = message if message.present?
         crumb.data = data
       end
     end
