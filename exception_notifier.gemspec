@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'exception_notifier'
-  s.version = '0.1.3'
+  s.version = '0.1.4'
   s.summary = "A wrapper for GiveLively's exception notifier"
   s.authors = ['Tim Lawrenz', 'Joe Anzalone', 'Dave Urban']
   s.date = '2020-02-20'
