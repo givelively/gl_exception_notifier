@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'exception_notifier'
-  s.version = '0.1.5'
+  s.version = '0.1.6'
   s.summary = "A wrapper for GiveLively's exception notifier"
   s.authors = ['Tim Lawrenz', 'Joe Anzalone', 'Dave Urban']
   s.date = '2020-02-20'
@@ -11,6 +11,8 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.homepage = 'https://github.com/givelively/exception_notifier/'
 
-  s.add_dependency 'sentry-raven', '~> 2'
+  s.add_dependency 'sentry-ruby'
+  s.add_dependency 'sentry-rails'
+  s.add_dependency 'active_support', '~> 5'
   s.add_development_dependency 'rspec', '~> 3.8.0'
 end
