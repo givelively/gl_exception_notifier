@@ -38,7 +38,14 @@ class ExceptionNotifier
       raise ArgumentError.new('type paramater must be one of: :extra_context, :tags_context, :user_context') unless CONTEXT_TYPES.include?(type)
       raise ArgumentError.new('contexts must be a hash') unless context.is_a?(Hash)
 
-      error_client.send(type, context)
+      case type
+      when :user_context
+        error_client.set_user(context)
+      when :tags_context
+        error_client.set_tags(context)
+      when :extra_context
+        error_client.set_extras(context)
+      end
     end
 
     # @params data [Hash] the key values to add to the breadcrumb
@@ -47,20 +54,22 @@ class ExceptionNotifier
       raise ArgumentError.new('data must be a hash') unless data.is_a?(Hash)
       raise ArgumentError.new('when providing a message, it must be a string') if message.present? && !message.is_a?(String)
 
-      error_client.breadcrumbs.record do |crumb|
-        crumb.message = message
-        crumb.data = data
-      end
+      crumb = breadcrumb.new(message: message, data: data)
+      error_client.add_breadcrumb(crumb)
     end
 
     def last_breadcrumb
-      error_client.breadcrumbs.buffer.last
+      error_client.get_current_scope&.breadcrumbs&.peek
     end
 
     private
 
     def error_client
-      Raven
+      Sentry
+    end
+
+    def breadcrumb
+      error_client::Breadcrumb
     end
   end
 end
