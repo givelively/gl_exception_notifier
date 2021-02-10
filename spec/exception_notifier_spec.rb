@@ -1,10 +1,13 @@
-require 'raven'
+require 'sentry-ruby'
 require 'exception_notifier'
+require 'active_support/all'
 
 describe ExceptionNotifier do
+  let(:client) { Sentry }
+
   context 'with an exception as parameter' do
     it 'accepts Exceptions as parameter' do
-      allow(Raven).to receive(:capture_exception)
+      allow(client).to receive(:capture_exception)
 
       described_class.should_receive(:capture_exception)
       described_class.call(ZeroDivisionError)
@@ -13,39 +16,39 @@ describe ExceptionNotifier do
 
   context 'with a form of message as parameters' do
     it 'accepts Arrays as parameter' do
-      allow(Raven).to receive(:capture_message)
+      allow(client).to receive(:capture_message)
 
       described_class.should_receive(:capture_message)
       described_class.call(%w[we are in trouble])
     end
 
     it 'accepts Hashes as parameter' do
-      allow(Raven).to receive(:capture_message)
+      allow(client).to receive(:capture_message)
 
       described_class.should_receive(:capture_message)
       described_class.call(message: 'we are in trouble')
     end
 
     it 'accepts mixed parameters' do
-      allow(Raven).to receive(:capture_message)
+      allow(client).to receive(:capture_message)
 
       described_class.should_receive(:capture_message)
       described_class.call('message', details: 'we are in trouble')
     end
 
     it 'correctly reports a message with a hash of params to Sentry' do
-      allow(Raven).to receive(:capture_message)
+      allow(client).to receive(:capture_message)
 
-      Raven.should_receive(:capture_message).with(
+      client.should_receive(:capture_message).with(
         'message', extra: { details: 'we are in trouble' }
       )
       described_class.call('message', details: 'we are in trouble')
     end
 
     it 'correctly reports a message with an array of params to Sentry' do
-      allow(Raven).to receive(:capture_message)
+      allow(client).to receive(:capture_message)
 
-      Raven.should_receive(:capture_message).with('message', extra: { parameters: [1, 2, 3] })
+      client.should_receive(:capture_message).with('message', extra: { parameters: [1, 2, 3] })
       described_class.call('message', 1, 2, 3)
     end
   end
@@ -54,10 +57,10 @@ describe ExceptionNotifier do
     context 'when extra context' do
       let(:params) { { params: { a: 1, b: 2 } } }
 
-      before { allow(Raven).to receive(:extra_context) }
+      before { allow(client).to receive(:extra_context) }
 
       it 'sets extra context' do
-        Raven.should_receive(:extra_context).with(params)
+        client.should_receive(:set_extras).with(params)
         described_class.add_context(:extra_context, params)
       end
     end
@@ -65,10 +68,10 @@ describe ExceptionNotifier do
     context 'when tags context' do
       let(:request_id) { 'abcd12345' }
 
-      before { allow(Raven).to receive(:extra_context) }
+      before { allow(client).to receive(:extra_context) }
 
       it 'sets extra context' do
-        Raven.should_receive(:tags_context).with(request_id: request_id)
+        client.should_receive(:set_tags).with(request_id: request_id)
         described_class.add_context(:tags_context, request_id: request_id)
       end
     end
@@ -76,10 +79,10 @@ describe ExceptionNotifier do
     context 'when user context' do
       let(:uuid) { 'abcd12345' }
 
-      before { allow(Raven).to receive(:user_context) }
+      before { allow(client).to receive(:user_context) }
 
       it 'sets user context' do
-        Raven.should_receive(:user_context).with(user_uuid: uuid)
+        client.should_receive(:set_user).with(user_uuid: uuid)
         described_class.add_context(:user_context, user_uuid: uuid)
       end
     end
@@ -98,22 +101,17 @@ describe ExceptionNotifier do
   end
 
   describe '.breadcrumb' do
-    let(:breadcrumbs) { instance_double('breadcrumb') }
-    let(:crumb) { instance_double('crumb') }
     let(:data) { { a: 1 } }
     let(:message) { 'message' }
+    let(:breadcrumbs) { instance_double('breadcrumbs') }
 
     before do
-      allow(Raven).to receive(:breadcrumbs).and_return(breadcrumbs)
-      allow(breadcrumbs).to receive(:record).and_yield(crumb)
-      allow(crumb).to receive(:message=).with(message)
-      allow(crumb).to receive(:data=).with(data)
+      allow(client).to receive(:get_current_scope).and_return(breadcrumbs)
+      allow(breadcrumbs).to receive(:record).with(kind_of(client::Breadcrumb))
     end
 
     it 'sets message and data crumbs' do
-      crumb.should_receive(:message=).with(message)
-      crumb.should_receive(:data=).with(data)
-
+      client.should_receive(:add_breadcrumb).with(having_attributes(data: data, message: message))
       described_class.breadcrumbs(data: data, message: message)
     end
 
@@ -131,9 +129,7 @@ describe ExceptionNotifier do
 
     context 'when message is not provided' do
       it 'sets data cumbs' do
-        crumb.should_receive(:message=).never
-        crumb.should_receive(:data=).with(data)
-
+        client.should_receive(:add_breadcrumb).with(having_attributes(data: data, message: nil))
         described_class.breadcrumbs(data: data)
       end
     end
@@ -141,15 +137,17 @@ describe ExceptionNotifier do
 
   describe '.last_breadcrumb' do
     let(:breadcrumbs) { instance_double('breadcrumb') }
-    let(:buffer) { ['first', 'last'] }
+    let(:scope) { instance_double('scope') }
 
     before do
-      allow(Raven).to receive(:breadcrumbs).and_return(breadcrumbs)
-      allow(breadcrumbs).to receive(:buffer).and_return(buffer)
+      allow(client).to receive(:get_current_scope).and_return(scope)
+      allow(scope).to receive(:breadcrumbs).and_return(breadcrumbs)
+      allow(breadcrumbs).to receive(:peek)
     end
 
     it 'returns the last crumb from the buffer' do
-      expect(described_class.last_breadcrumb).to eq 'last'
+      breadcrumbs.should_receive(:peek)
+      described_class.last_breadcrumb
     end
   end
 end
