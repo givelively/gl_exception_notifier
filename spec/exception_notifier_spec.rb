@@ -9,7 +9,7 @@ describe ExceptionNotifier do
     it 'accepts Exceptions as parameter' do
       allow(client).to receive(:capture_exception)
 
-      described_class.should_receive(:capture_exception)
+      expect(described_class).to receive(:capture_exception)
       described_class.call(ZeroDivisionError)
     end
   end
@@ -18,37 +18,37 @@ describe ExceptionNotifier do
     it 'accepts Arrays as parameter' do
       allow(client).to receive(:capture_message)
 
-      described_class.should_receive(:capture_message)
+      expect(described_class).to receive(:capture_message)
       described_class.call(%w[we are in trouble])
     end
 
     it 'accepts Hashes as parameter' do
       allow(client).to receive(:capture_message)
 
-      described_class.should_receive(:capture_message)
+      expect(described_class).to receive(:capture_message)
       described_class.call(message: 'we are in trouble')
     end
 
     it 'accepts mixed parameters' do
       allow(client).to receive(:capture_message)
 
-      described_class.should_receive(:capture_message)
+      expect(described_class).to receive(:capture_message)
       described_class.call('message', details: 'we are in trouble')
     end
 
     it 'correctly reports a message with a hash of params to Sentry' do
       allow(client).to receive(:capture_message)
 
-      client.should_receive(:capture_message).with(
-        'message', extra: { details: 'we are in trouble' }
-      )
+      expect(client).to receive(:capture_message)
+                    .with('message', extra: { details: 'we are in trouble' })
       described_class.call('message', details: 'we are in trouble')
     end
 
     it 'correctly reports a message with an array of params to Sentry' do
       allow(client).to receive(:capture_message)
 
-      client.should_receive(:capture_message).with('message', extra: { parameters: [1, 2, 3] })
+      expect(client).to receive(:capture_message)
+                    .with('message', extra: { parameters: [1, 2, 3] })
       described_class.call('message', 1, 2, 3)
     end
   end
@@ -60,7 +60,7 @@ describe ExceptionNotifier do
       before { allow(client).to receive(:extra_context) }
 
       it 'sets extra context' do
-        client.should_receive(:set_extras).with(params)
+        expect(client).to receive(:set_extras).with(params)
         described_class.add_context(:extra_context, params)
       end
     end
@@ -71,7 +71,7 @@ describe ExceptionNotifier do
       before { allow(client).to receive(:extra_context) }
 
       it 'sets extra context' do
-        client.should_receive(:set_tags).with(request_id: request_id)
+        expect(client).to receive(:set_tags).with(request_id: request_id)
         described_class.add_context(:tags_context, request_id: request_id)
       end
     end
@@ -82,7 +82,7 @@ describe ExceptionNotifier do
       before { allow(client).to receive(:user_context) }
 
       it 'sets user context' do
-        client.should_receive(:set_user).with(user_uuid: uuid)
+        expect(client).to receive(:set_user).with(user_uuid: uuid)
         described_class.add_context(:user_context, user_uuid: uuid)
       end
     end
@@ -111,7 +111,8 @@ describe ExceptionNotifier do
     end
 
     it 'sets message and data crumbs' do
-      client.should_receive(:add_breadcrumb).with(having_attributes(data: data, message: message))
+      expect(client).to receive(:add_breadcrumb)
+                    .with(having_attributes(data: data, message: message))
       described_class.breadcrumbs(data: data, message: message)
     end
 
@@ -129,7 +130,15 @@ describe ExceptionNotifier do
 
     context 'when message is not provided' do
       it 'sets data cumbs' do
-        client.should_receive(:add_breadcrumb).with(having_attributes(data: data, message: nil))
+        expect(client).to receive(:add_breadcrumb)
+        result = described_class.breadcrumbs(data: data)
+        expect(result.data).to eq(data)
+        expect(result.message).to be_blank
+      end
+
+      it 'creates a breadcrumb' do
+        expect(client).to receive(:add_breadcrumb)
+                      .with(instance_of(Sentry::Breadcrumb))
         described_class.breadcrumbs(data: data)
       end
     end
@@ -142,11 +151,10 @@ describe ExceptionNotifier do
     before do
       allow(client).to receive(:get_current_scope).and_return(scope)
       allow(scope).to receive(:breadcrumbs).and_return(breadcrumbs)
-      allow(breadcrumbs).to receive(:peek)
     end
 
     it 'returns the last crumb from the buffer' do
-      breadcrumbs.should_receive(:peek)
+      expect(breadcrumbs).to receive(:peek)
       described_class.last_breadcrumb
     end
   end
