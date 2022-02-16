@@ -56,6 +56,7 @@ class ExceptionNotifier
 
       crumb = breadcrumb.new(message: message, data: data)
       error_client.add_breadcrumb(crumb)
+      crumb
     end
 
     def last_breadcrumb
