@@ -57,7 +57,7 @@ describe ExceptionNotifier do
     context 'when extra context' do
       let(:params) { { params: { a: 1, b: 2 } } }
 
-      before { allow(client).to receive(:extra_context) }
+      before { allow(client).to receive(:set_extras) }
 
       it 'sets extra context' do
         expect(client).to receive(:set_extras).with(params)
@@ -68,7 +68,7 @@ describe ExceptionNotifier do
     context 'when tags context' do
       let(:request_id) { 'abcd12345' }
 
-      before { allow(client).to receive(:extra_context) }
+      before { allow(client).to receive(:set_extras) }
 
       it 'sets extra context' do
         expect(client).to receive(:set_tags).with(request_id: request_id)
@@ -79,7 +79,7 @@ describe ExceptionNotifier do
     context 'when user context' do
       let(:uuid) { 'abcd12345' }
 
-      before { allow(client).to receive(:user_context) }
+      before { allow(client).to receive(:set_user) }
 
       it 'sets user context' do
         expect(client).to receive(:set_user).with(user_uuid: uuid)
