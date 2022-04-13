@@ -22,7 +22,8 @@ jobs:
       - checkout
       - ruby/install-deps
       - ruby/rspec-test
-      - codecov/upload
+      - codecov/upload:
+        file: /tmp/test-results/rspec/results.xml
 workflows:
   test:
     jobs:
