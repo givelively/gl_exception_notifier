@@ -22,3 +22,7 @@ jobs:
       - checkout
       - ruby/install-deps
       - ruby/rspec-test
+workflows:
+  test:
+    jobs:
+      - test
