@@ -23,9 +23,9 @@ jobs:
       - ruby/install-deps
       - ruby/rspec-test
       - store_test_results:
-          path: test-results
+          path: /tmp/test-results/rspec/results.xml
       - codecov/upload:
-          file: test-results/rspec/results.xml
+          file: /tmp/test-results/rspec/results.xml
 workflows:
   test:
     jobs:
