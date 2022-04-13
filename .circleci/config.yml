@@ -1,0 +1,24 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@1.5.0
+  codecov: codecov/codecov@3.2.2
+  browser-tools: circleci/browser-tools@1.1
+
+jobs:
+  test:
+    parallelism: 1
+    working_directory: ~/project
+    resource_class: small
+    docker:
+      - image: cimg/ruby:2.7.5
+    environment:
+      RAILS_ENV: test
+      BUNDLE_JOBS: '3'
+      BUNDLE_RETRY: '3'
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - '91:82:dc:42:95:4f:4a:3b:db:32:5c:bc:c7:08:c8:6e'
+      - checkout
+      - ruby/install-deps
+      - ruby/rspec-test
