@@ -2,7 +2,8 @@
 
 This is GiveLively's exception notification wrapper. The goal of this gem is to provide the charity api with a clean set of exception and logging apis regardless of what exception client is used under the hood. 
 
-Currently we use [sentry-raven](https://www.rubydoc.info/gems/sentry-raven/2.7.3), which is now in maintenance mode. it is recommended by Sentry that we migrate from this deprecated sdk to the newer [sentry-ruby](https://docs.sentry.io/platforms/ruby/). `ExceptionNotifier` will isolate the main charity api app from this change.
+Currently we use [sentry-ruby](https://docs.sentry.io/platforms/ruby/).
+`ExceptionNotifier` isolates the main charity api app from the exception notifier in use.
 
 [![codecov](https://codecov.io/gh/givelively/exception_notifier/branch/master/graph/badge.svg?token=4P64ZW129N)](https://codecov.io/gh/givelively/exception_notifier)
 
