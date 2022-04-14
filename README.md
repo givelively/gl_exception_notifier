@@ -60,3 +60,5 @@ describe '#method' do
   end
 end
 ```
+
+To build a new version, update the `exception_notifier.gempec` with the new version number and run `gem build exception_notifier.gempec`. This will give you a new file in the root folder

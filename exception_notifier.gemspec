@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.version = '0.1.10'
   s.summary = "A wrapper for GiveLively's exception notifier"
   s.authors = ['Tim Lawrenz', 'Joe Anzalone', 'Dave Urban']
-  s.date = '2022-02-08'
+  s.date = '2022-04-14'
   s.description = "To avoid having to update exception notifiers in all the different repositories,
     we pull out commonalities and wrap them into gems"
   s.email = 'tim@givelively.org'
