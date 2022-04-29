@@ -10,8 +10,8 @@ gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'sentry-sidekiq'
 
-group :test, :development do
-  gem 'codecov'
+group :test do
+  gem 'codecov', require: true
   gem 'rspec', require: 'spec'
   gem 'rspec_junit_formatter'
 end
