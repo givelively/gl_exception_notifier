@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ExceptionNotifier
+class GLExceptionNotifier
   CONTEXT_TYPES = %i(extra_context tags_context user_context)
   class << self
     def call(*args)

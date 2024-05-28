@@ -1,55 +1,63 @@
 require 'sentry-ruby'
-require 'exception_notifier'
+require 'g_l_exception_notifier'
 require 'active_support/all'
 
-describe ExceptionNotifier do
+describe GLExceptionNotifier do
   let(:client) { Sentry }
 
-  context 'with an exception as parameter' do
-    it 'accepts Exceptions as parameter' do
-      allow(client).to receive(:capture_exception)
+  describe "call" do
+    context 'with an exception as parameter' do
+      it 'accepts Exceptions as parameter' do
+        allow(client).to receive(:capture_exception)
 
-      expect(described_class).to receive(:capture_exception)
-      described_class.call(ZeroDivisionError)
-    end
-  end
-
-  context 'with a form of message as parameters' do
-    it 'accepts Arrays as parameter' do
-      allow(client).to receive(:capture_message)
-
-      expect(described_class).to receive(:capture_message)
-      described_class.call(%w[we are in trouble])
+        expect(described_class).to receive(:capture_exception)
+        described_class.call(ZeroDivisionError)
+      end
     end
 
-    it 'accepts Hashes as parameter' do
-      allow(client).to receive(:capture_message)
+    context 'with a form of message as parameters' do
+      it 'accepts Arrays as parameter' do
+        allow(client).to receive(:capture_message)
 
-      expect(described_class).to receive(:capture_message)
-      described_class.call(message: 'we are in trouble')
+        expect(described_class).to receive(:capture_message)
+        described_class.call(%w[we are in trouble])
+      end
+
+      it 'accepts Hashes as parameter' do
+        allow(client).to receive(:capture_message)
+
+        expect(described_class).to receive(:capture_message)
+        described_class.call(message: 'we are in trouble')
+      end
+
+      it 'accepts mixed parameters' do
+        allow(client).to receive(:capture_message)
+
+        expect(described_class).to receive(:capture_message)
+        described_class.call('message', details: 'we are in trouble')
+      end
+
+      it 'correctly reports a message with a hash of params to Sentry' do
+        allow(client).to receive(:capture_message)
+
+        expect(client).to receive(:capture_message)
+                      .with('message', extra: { details: 'we are in trouble' })
+        described_class.call('message', details: 'we are in trouble')
+      end
+
+      it 'correctly reports a message with an array of params to Sentry' do
+        allow(client).to receive(:capture_message)
+
+        expect(client).to receive(:capture_message)
+                      .with('message', extra: { parameters: [1, 2, 3] })
+        described_class.call('message', 1, 2, 3)
+      end
     end
 
-    it 'accepts mixed parameters' do
-      allow(client).to receive(:capture_message)
-
-      expect(described_class).to receive(:capture_message)
-      described_class.call('message', details: 'we are in trouble')
-    end
-
-    it 'correctly reports a message with a hash of params to Sentry' do
-      allow(client).to receive(:capture_message)
-
-      expect(client).to receive(:capture_message)
-                    .with('message', extra: { details: 'we are in trouble' })
-      described_class.call('message', details: 'we are in trouble')
-    end
-
-    it 'correctly reports a message with an array of params to Sentry' do
-      allow(client).to receive(:capture_message)
-
-      expect(client).to receive(:capture_message)
-                    .with('message', extra: { parameters: [1, 2, 3] })
-      described_class.call('message', 1, 2, 3)
+    context 'with keyword args' do
+      it 'Raises' do
+        described_class.call({error: "Something"}).to raise_error(/ExceptionNotifier/)
+      end
     end
   end
 
