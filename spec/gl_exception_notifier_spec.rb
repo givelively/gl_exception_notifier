@@ -85,7 +85,8 @@ describe GLExceptionNotifier do
       before { allow(client).to receive(:set_extras) }
 
       it 'sets extra context' do
-        expect(client).to receive(:set_tags).with(request_id: request_id)
+        expect(client).to receive(:set_tags).with({request_id: request_id})
+
         described_class.add_context(:tags_context, request_id: request_id)
       end
     end
@@ -96,7 +97,7 @@ describe GLExceptionNotifier do
       before { allow(client).to receive(:set_user) }
 
       it 'sets user context' do
-        expect(client).to receive(:set_user).with(user_uuid: uuid)
+        expect(client).to receive(:set_user).with({user_uuid: uuid})
         described_class.add_context(:user_context, user_uuid: uuid)
       end
     end
