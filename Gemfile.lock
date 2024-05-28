@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    g_l_exception_notifier (1.0.0)
+    gl_exception_notifier (1.0.0)
       sentry-rails
       sentry-ruby
       sentry-sidekiq
@@ -143,6 +143,10 @@ GEM
     rubocop-performance (1.21.0)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rails (2.22.1)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.33.0, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
     rubocop-rspec (2.29.2)
@@ -180,10 +184,11 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
-  g_l_exception_notifier!
+  gl_exception_notifier!
   gl_lint
-  rspec (~> 3.11.0)
+  rspec
   rspec_junit_formatter
+  rubocop-rails
 
 BUNDLED WITH
    2.4.21

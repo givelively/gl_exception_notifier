@@ -13,11 +13,9 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/givelively/gl_exception_notifier/'
   s.license = 'Apache'
 
-  s.add_dependency 'sentry-ruby'
   s.add_dependency 'sentry-rails'
+  s.add_dependency 'sentry-ruby'
   s.add_dependency 'sentry-sidekiq'
-  s.add_development_dependency 'rspec', '~> 3.11.0'
-  s.add_development_dependency 'gl_lint'
 
   s.metadata['rubygems_mfa_required'] = 'true'
 end
