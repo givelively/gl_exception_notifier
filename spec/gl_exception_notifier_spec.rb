@@ -1,5 +1,5 @@
 require 'sentry-ruby'
-require 'g_l_exception_notifier'
+require 'gl_exception_notifier'
 require 'active_support/all'
 
 describe GLExceptionNotifier do
@@ -55,8 +55,14 @@ describe GLExceptionNotifier do
     end
 
     context 'with keyword args' do
-      it 'Raises' do
-        described_class.call({error: "Something"}).to raise_error(/ExceptionNotifier/)
+      let(:target_message) { 'GLExceptionNotifier: called with kwargs, should have been positional' }
+      it 'calls with the unknown params' do
+        allow(client).to receive(:capture_message)
+
+        expect(client).to receive(:capture_message)
+                      .with(target_message, extra: {parameters: [{ error: "Something" }]})
+
+        described_class.call(error: "Something")
       end
     end
   end

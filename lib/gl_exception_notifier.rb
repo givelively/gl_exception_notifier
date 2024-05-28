@@ -20,7 +20,12 @@ class GLExceptionNotifier
         message = args.first
         extra = args.length == 2 && args.last.is_a?(Hash) ? args.last : { parameters: args.drop(1) }
       else
-        message = 'Unknown parameter set.'
+        message_info = if args.first.is_a?(Hash) 
+          "called with kwargs, should have been positional" 
+        else
+          "Unknown parameter set"
+        end
+        message = "GLExceptionNotifier: #{message_info}"
         extra = { parameters: args }
       end
 
