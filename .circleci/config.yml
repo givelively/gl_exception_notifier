@@ -33,7 +33,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - test
+      - test:
           matrix:
             parameters:
               # https://github.com/CircleCI-Public/cimg-ruby
