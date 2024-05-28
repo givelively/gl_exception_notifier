@@ -23,7 +23,7 @@ jobs:
           fingerprints:
             - '91:82:dc:42:95:4f:4a:3b:db:32:5c:bc:c7:08:c8:6e'
       - checkout
-      - ruby/install-deps
+      - ruby/install-deps:
           with-cache: false
       - ruby/rspec-test
       - store_test_results:
