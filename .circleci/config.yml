@@ -13,7 +13,7 @@ jobs:
     working_directory: ~/project
     resource_class: small
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:<< parameters.ruby-version >>
     environment:
       RAILS_ENV: test
       BUNDLE_JOBS: '3'
@@ -23,6 +23,7 @@ jobs:
           fingerprints:
             - '91:82:dc:42:95:4f:4a:3b:db:32:5c:bc:c7:08:c8:6e'
       - checkout
+      - run: ruby --version
       - ruby/install-deps:
           with-cache: false
       - ruby/rspec-test
