@@ -2,6 +2,7 @@
 
 class GLExceptionNotifier
   CONTEXT_TYPES = %i[extra_context tags_context user_context].freeze
+
   class << self
     def call(*args)
       if exceptionable?(args.first)
