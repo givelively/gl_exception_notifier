@@ -49,7 +49,8 @@ describe GLExceptionNotifier do
       let(:target_message) { 'GLExceptionNotifier: called with kwargs, should have been positional' }
 
       it 'calls with the unknown params' do
-        expect(client).to receive(:capture_message).with(target_message, extra: { parameters: [{ error: 'Something' }] })
+        expect(client).to receive(:capture_message).with(target_message,
+                                                         extra: { parameters: [{ error: 'Something' }] })
 
         described_class.call(error: 'Something')
       end
