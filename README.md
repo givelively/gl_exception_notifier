@@ -62,15 +62,3 @@ describe '#method' do
 end
 ```
 
-To build a new version, update the `exception_notifier.gempec` with the new version number and run `gem build exception_notifier.gempec`. This will give you a new file in the root folder
-
-
-## Publishing gem to rubygems!
-
-[Build the gem](http://guides.rubygems.org/make-your-own-gem/)
-
-    gem build gl_exception_notifier.gemspec
-
-[Push to rubygems](http://guides.rubygems.org/publishing/)
-
-    gem push gl_exception_notifier-1.0.0.gem
