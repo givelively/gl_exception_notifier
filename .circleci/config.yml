@@ -7,10 +7,13 @@ orbs:
 jobs:
   test:
     parallelism: 1
+    parameters:
+      ruby-version:
+        type: string
     working_directory: ~/project
     resource_class: small
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:<< parameters.ruby-version >>
     environment:
       RAILS_ENV: test
       BUNDLE_JOBS: '3'
@@ -20,7 +23,9 @@ jobs:
           fingerprints:
             - '91:82:dc:42:95:4f:4a:3b:db:32:5c:bc:c7:08:c8:6e'
       - checkout
-      - ruby/install-deps
+      - run: ruby --version
+      - ruby/install-deps:
+          with-cache: false
       - ruby/rspec-test
       - store_test_results:
           path: /tmp/test-results/rspec/results.xml
@@ -29,4 +34,9 @@ jobs:
 workflows:
   test:
     jobs:
-      - test
+      - test:
+          matrix:
+            parameters:
+              # https://github.com/CircleCI-Public/cimg-ruby
+              # only supports the last three ruby versions
+              ruby-version: ["3.3", "3.2", "3.1"]
