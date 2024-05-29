@@ -5,7 +5,7 @@ require 'active_support/all'
 describe GLExceptionNotifier do
   let(:client) { Sentry }
 
-  describe "call" do
+  describe 'call' do
     context 'with an exception as parameter' do
       it 'accepts Exceptions as parameter' do
         allow(client).to receive(:capture_exception)
@@ -56,13 +56,14 @@ describe GLExceptionNotifier do
 
     context 'with keyword args' do
       let(:target_message) { 'GLExceptionNotifier: called with kwargs, should have been positional' }
+
       it 'calls with the unknown params' do
         allow(client).to receive(:capture_message)
 
         expect(client).to receive(:capture_message)
-                      .with(target_message, extra: {parameters: [{ error: "Something" }]})
+                      .with(target_message, extra: { parameters: [{ error: 'Something' }] })
 
-        described_class.call(error: "Something")
+        described_class.call(error: 'Something')
       end
     end
   end
@@ -85,9 +86,9 @@ describe GLExceptionNotifier do
       before { allow(client).to receive(:set_extras) }
 
       it 'sets extra context' do
-        expect(client).to receive(:set_tags).with({request_id: request_id})
+        expect(client).to receive(:set_tags).with({ request_id: })
 
-        described_class.add_context(:tags_context, request_id: request_id)
+        described_class.add_context(:tags_context, request_id:)
       end
     end
 
@@ -97,7 +98,7 @@ describe GLExceptionNotifier do
       before { allow(client).to receive(:set_user) }
 
       it 'sets user context' do
-        expect(client).to receive(:set_user).with({user_uuid: uuid})
+        expect(client).to receive(:set_user).with({ user_uuid: uuid })
         described_class.add_context(:user_context, user_uuid: uuid)
       end
     end
@@ -118,7 +119,7 @@ describe GLExceptionNotifier do
   describe '.breadcrumb' do
     let(:data) { { a: 1 } }
     let(:message) { 'message' }
-    let(:breadcrumbs) { instance_double('breadcrumbs') }
+    let(:breadcrumbs) { instance_double('breadcrumbs') } # rubocop:disable RSpec/VerifiedDoubleReference
 
     before do
       allow(client).to receive(:get_current_scope).and_return(breadcrumbs)
@@ -127,26 +128,26 @@ describe GLExceptionNotifier do
 
     it 'sets message and data crumbs' do
       expect(client).to receive(:add_breadcrumb)
-                    .with(having_attributes(data: data, message: message))
-      described_class.breadcrumbs(data: data, message: message)
+                    .with(having_attributes(data:, message:))
+      described_class.breadcrumbs(data:, message:)
     end
 
     context 'when data is invalid' do
       it 'raises argument error' do
-        expect { described_class.breadcrumbs(data: message, message: message) }.to raise_error ArgumentError
+        expect { described_class.breadcrumbs(data: message, message:) }.to raise_error ArgumentError
       end
     end
 
     context 'when message is invalid' do
       it 'raises argument error' do
-        expect { described_class.breadcrumbs(data: data, message: data) }.to raise_error ArgumentError
+        expect { described_class.breadcrumbs(data:, message: data) }.to raise_error ArgumentError
       end
     end
 
     context 'when message is not provided' do
       it 'sets data cumbs' do
         expect(client).to receive(:add_breadcrumb)
-        result = described_class.breadcrumbs(data: data)
+        result = described_class.breadcrumbs(data:)
         expect(result.data).to eq(data)
         expect(result.message).to be_blank
       end
@@ -154,14 +155,14 @@ describe GLExceptionNotifier do
       it 'creates a breadcrumb' do
         expect(client).to receive(:add_breadcrumb)
                       .with(instance_of(Sentry::Breadcrumb))
-        described_class.breadcrumbs(data: data)
+        described_class.breadcrumbs(data:)
       end
     end
   end
 
   describe '.last_breadcrumb' do
-    let(:breadcrumbs) { instance_double('breadcrumb') }
-    let(:scope) { instance_double('scope') }
+    let(:breadcrumbs) { instance_double('breadcrumb') } # rubocop:disable RSpec/VerifiedDoubleReference
+    let(:scope) { instance_double('scope') } # rubocop:disable RSpec/VerifiedDoubleReference
 
     before do
       allow(client).to receive(:get_current_scope).and_return(scope)
