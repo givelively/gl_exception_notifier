@@ -22,7 +22,7 @@ Capture exceptions with the call method.
   end
 ```
 
-**Adding Context**
+### Adding Context
 
 The `add_context` method takes two arguments, first a `type` which must be symbol: `:tags_context`, `:user_context`, or `:extra_context`. Second, a `Hash` of parameters to add to the given context type.
 ```ruby
@@ -36,14 +36,14 @@ GLExceptionNotifier.add_context(:user_context, user_id: user_id)
 GLExceptionNotifier.add_context(:extra_context, more_info: { interesting_data: 1234, more_data: 'hello world' })
 ```
 
-**Add Breadcrumbs to Context**
+### Add Breadcrumbs to Context
 
 The `breadcrumbs` method takes two arguments, first a `message` which must be a `String`, and second a `Hash` of data to add to the context's breadcrumb trail.
 ```ruby
 GLExceptionNotifier.breadcrumbs(message: 'foo', data: { bar: 'baz' })
 ```
 
-**Breadcrumb Inspection**
+### Breadcrumb Inspection
 
 For testing purposes, we may wish to inspect the last  `breadcrumb`. To do so, we provide a `last_breadcrumb` method.
 
@@ -63,3 +63,14 @@ end
 ```
 
 To build a new version, update the `exception_notifier.gempec` with the new version number and run `gem build exception_notifier.gempec`. This will give you a new file in the root folder
+
+
+## Publishing gem to rubygems!
+
+[Build the gem](http://guides.rubygems.org/make-your-own-gem/)
+
+    gem build gl_exception_notifier.gemspec
+
+[Push to rubygems](http://guides.rubygems.org/publishing/)
+
+    gem push gl_exception_notifier-1.0.0.gem

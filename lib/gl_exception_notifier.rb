@@ -12,32 +12,6 @@ class GLExceptionNotifier
       end
     end
 
-    def capture_exception(args)
-      error_client.capture_exception(*args)
-    end
-
-    def capture_message(args)
-      if args.first.is_a?(String)
-        message = args.first
-        extra = args.length == 2 && args.last.is_a?(Hash) ? args.last : { parameters: args.drop(1) }
-      else
-        message_info = if args.first.is_a?(Hash)
-                         'called with kwargs, should have been positional'
-                       else
-                         'Unknown parameter set'
-                       end
-        message = "GLExceptionNotifier: #{message_info}"
-        extra = { parameters: args }
-      end
-
-      error_client.capture_message(message, extra:)
-    end
-
-    def exceptionable?(obj)
-      obj.is_a?(Exception) ||
-        (obj.respond_to?(:ancestors) && obj.ancestors.include?(Exception))
-    end
-
     # @parmas type [Symbol] the type of context to add, either `:tags_context`, `:user_context`, or `:extra_context`
     # @params context [Hash] the key values to add as context
     def add_context(type, context)
@@ -73,6 +47,32 @@ class GLExceptionNotifier
     end
 
     private
+
+    def exceptionable?(obj)
+      obj.is_a?(Exception) ||
+        (obj.respond_to?(:ancestors) && obj.ancestors.include?(Exception))
+    end
+
+    def capture_exception(args)
+      error_client.capture_exception(*args)
+    end
+
+    def capture_message(args)
+      if args.first.is_a?(String)
+        message = args.first
+        extra = args.length == 2 && args.last.is_a?(Hash) ? args.last : { parameters: args.drop(1) }
+      else
+        message_info = if args.first.is_a?(Hash)
+                         'called with kwargs, should have been positional'
+                       else
+                         'Unknown parameter set'
+                       end
+        message = "GLExceptionNotifier: #{message_info}"
+        extra = { parameters: args }
+      end
+
+      error_client.capture_message(message, extra:)
+    end
 
     def error_client
       Sentry
