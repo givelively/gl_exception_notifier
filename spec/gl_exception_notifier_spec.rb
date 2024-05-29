@@ -17,37 +17,28 @@ describe GLExceptionNotifier do
 
     context 'with a form of message as parameters' do
       it 'accepts Arrays as parameter' do
-        allow(client).to receive(:capture_message)
-
         expect(described_class).to receive(:capture_message)
         described_class.call(%w[we are in trouble])
       end
 
       it 'accepts Hashes as parameter' do
-        allow(client).to receive(:capture_message)
-
         expect(described_class).to receive(:capture_message)
         described_class.call(message: 'we are in trouble')
       end
 
       it 'accepts mixed parameters' do
-        allow(client).to receive(:capture_message)
-
         expect(described_class).to receive(:capture_message)
         described_class.call('message', details: 'we are in trouble')
       end
 
       it 'correctly reports a message with a hash of params to Sentry' do
-        allow(client).to receive(:capture_message)
-
         expect(client).to receive(:capture_message)
                       .with('message', extra: { details: 'we are in trouble' })
+
         described_class.call('message', details: 'we are in trouble')
       end
 
       it 'correctly reports a message with an array of params to Sentry' do
-        allow(client).to receive(:capture_message)
-
         expect(client).to receive(:capture_message)
                       .with('message', extra: { parameters: [1, 2, 3] })
         described_class.call('message', 1, 2, 3)
@@ -58,10 +49,7 @@ describe GLExceptionNotifier do
       let(:target_message) { 'GLExceptionNotifier: called with kwargs, should have been positional' }
 
       it 'calls with the unknown params' do
-        allow(client).to receive(:capture_message)
-
-        expect(client).to receive(:capture_message)
-                      .with(target_message, extra: { parameters: [{ error: 'Something' }] })
+        expect(client).to receive(:capture_message).with(target_message, extra: { parameters: [{ error: 'Something' }] })
 
         described_class.call(error: 'Something')
       end
