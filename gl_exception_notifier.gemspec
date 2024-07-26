@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'gl_exception_notifier'
-  s.version = '1.0.0'
+  s.version = '1.0.1'
   s.summary = "A wrapper for GiveLively's exception notifier"
   s.authors = ['Give Lively', 'Tim Lawrenz', 'Joe Anzalone', 'Dave Urban']
   s.description = "To avoid having to update exception notifiers in all the different repositories,
