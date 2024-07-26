@@ -7,13 +7,30 @@ Currently we use [sentry-ruby](https://docs.sentry.io/platforms/ruby/).
 
 [![codecov](https://codecov.io/gh/givelively/exception_notifier/branch/master/graph/badge.svg?token=4P64ZW129N)](https://codecov.io/gh/givelively/exception_notifier)
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'gl_exception_notifier'
+```
+
+And then execute:
+
+    $ bundle install
+
+Or install it yourself as:
+
+    $ gem install gl_exception_notifier
+
 ## Usage
 
 `GLExceptionNotifier` supports the following:
 
-**Record an Exception**
+### Record an Exception
 
 Capture exceptions with the call method. 
+
 ```ruby
   begin
     raise StandardError
@@ -25,6 +42,7 @@ Capture exceptions with the call method.
 ### Adding Context
 
 The `add_context` method takes two arguments, first a `type` which must be symbol: `:tags_context`, `:user_context`, or `:extra_context`. Second, a `Hash` of parameters to add to the given context type.
+
 ```ruby
 # add tags to the context
 GLExceptionNotifier.add_context(:tags_context, my_tag: my_tag_value)
@@ -39,6 +57,7 @@ GLExceptionNotifier.add_context(:extra_context, more_info: { interesting_data: 1
 ### Add Breadcrumbs to Context
 
 The `breadcrumbs` method takes two arguments, first a `message` which must be a `String`, and second a `Hash` of data to add to the context's breadcrumb trail.
+
 ```ruby
 GLExceptionNotifier.breadcrumbs(message: 'foo', data: { bar: 'baz' })
 ```
