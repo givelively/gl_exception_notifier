@@ -9,7 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ['3.3', '3.2.3', '3.1']
+        # NOTE: when updating the Ruby versions, consider re-writing the rubocop_rules.yml
+        # and updating rules_ruby_version in spec/rubocop_rules_spec.rb
+        ruby-version: ['3.3', '3.2', '3.1']
     env:
       RAILS_ENV: test
       CI: true
