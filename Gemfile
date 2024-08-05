@@ -7,7 +7,7 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec_junit_formatter'
   gem 'rubocop-rails' # Remove once gl_lint is updated to 0.4.x (it's required)
-  gem 'rubocop', '1.65.0'
+  gem 'rubocop', '1.65.0' # Lock so that .rubocop_rules.yml doesn't change
 end
 
 gemspec
