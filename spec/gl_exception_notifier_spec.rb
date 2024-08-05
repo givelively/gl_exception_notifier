@@ -1,4 +1,3 @@
-require 'sentry-ruby'
 require 'gl_exception_notifier'
 require 'active_support/all'
 

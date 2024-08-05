@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'gl_exception_notifier'
-  s.version = '1.0.1'
+  s.version = '1.0.2'
   s.summary = "A wrapper for GiveLively's exception notifier"
   s.authors = ['Give Lively', 'Tim Lawrenz', 'Joe Anzalone', 'Dave Urban']
   s.description = "To avoid having to update exception notifiers in all the different repositories,
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 3.1'
 
   s.email = 'tim@givelively.org'
-  s.files = ['lib/gl_exception_notifier.rb']
+  s.files = %w[gl_exception_notifier.gemspec README.md LICENSE] + `git ls-files | grep -E '^(lib)'`.split("\n")
   s.require_paths = ['lib']
   s.homepage = 'https://github.com/givelively/gl_exception_notifier/'
   s.license = 'Apache'

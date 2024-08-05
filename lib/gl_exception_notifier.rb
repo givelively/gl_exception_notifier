@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sentry-ruby'
+
 class GLExceptionNotifier
   CONTEXT_TYPES = %i[extra_context tags_context user_context].freeze
 
