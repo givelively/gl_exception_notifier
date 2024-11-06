@@ -57,6 +57,9 @@ RSpec/AnyInstance:
 RSpec/VerifiedDoubles:
   IgnoreSymbolicNames: true
 
+RSpec/StringAsInstanceDoubleConstant:
+  Enabled: false
+
 RSpec/MessageSpies:
   Enabled: false
 
